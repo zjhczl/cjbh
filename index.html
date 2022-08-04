@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>成绩变化</title>
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+</head>
+
+<body>
+    <center>
+        <h1>学习成绩</h1>
+    </center>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <center>
+        <div id="main" style="width: 900px;height:800px;"></div>
+    </center>
+    <script type="text/javascript">
+        var url = "http://110.42.190.143:81/echarts/API.php?key=RUB_CNY"
+        var da1 = [8.2, 8.3];
+        var da2 = [50, 79];
+        var httpRequest = new XMLHttpRequest(); //第一步：建立所需的对象
+        httpRequest.open('GET', url, true); //第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send(); //第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        var das;
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var da = httpRequest.responseText; //获取到json字符串，还需解析
+                das = da.split("*");
+                for (var i = 0; i < das.length - 1; i++) {
+                    var s = das[i].split("~");
+                    // da1.push(s[0]);
+                    // da2.push(s[1]);
+                }
+                console.log(da1);
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        data: da1
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: da2,
+                        type: 'line'
+                    }]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        };
+    </script>
+</body>
+
+</html>
